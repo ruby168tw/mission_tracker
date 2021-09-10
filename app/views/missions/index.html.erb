@@ -1,5 +1,11 @@
 <h1>任務列表</h1>
 
+<% if session[:user_id] %>
+<%= link_to "登出", logout_path, method: :delete %>
+<% else %>
+<%= link_to "註冊", new_user_path %>
+<%= link_to "登入", login_path %>
+<% end %>
 <%= link_to "新增任務", new_mission_path %>
 
 <table>
@@ -14,15 +20,21 @@
     </tr>
   </thead>
   <tbody>
-    <% @missions.each do |mission| %>
-    <tr>
-      <td><%= mission.title %></td>
-      <td><%= mission.content %></td>
-      <td><%= mission.start_at %></td>
-      <td><%= mission.end_at %></td>
-      <td><%= mission.status %></td>
-      <td><%= mission.piority %></td>
-    </tr>
+    <% if @missions %>
+      <% @missions.each do |mission| %>
+      <tr>
+        <td><%= mission.title %></td>
+        <td><%= mission.content %></td>
+        <td><%= mission.start_at.strftime("%Y-%m-%d") %></td>
+        <td><%= mission.end_at.strftime("%Y-%m-%d") %></td>
+        <td><%= mission.status %></td>
+        <td><%= mission.piority %></td>
+        <td>
+        <%= link_to "編輯", edit_mission_path(mission) %>
+        <%= link_to "刪除", mission_path(mission), method: "delete", data: { confirm: "確認刪除" } %>
+      </td>
+      </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

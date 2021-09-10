@@ -1,0 +1,17 @@
+<h1>註冊</h1>
+
+<%= form_for(@user) do |f| %>
+    <%= f.label :email, "Email" %>
+    <%= f.text_field :email %> <br />
+
+    <%= f.label :nickname, "暱稱" %>
+    <%= f.text_field :nickname %> <br />
+
+    <%= f.label :password, "密碼" %>
+    <%= f.password_field :password %> <br />
+
+    <%= f.submit "送出"%>
+<% end %>
+
+<br />
+<%= link_to '回首頁', missions_path %>
