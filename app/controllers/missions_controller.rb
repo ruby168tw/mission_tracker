@@ -1,8 +1,11 @@
 class MissionsController < ApplicationController
+    before_action :authenticate_user, except: [:index]
     before_action :find_mission, only: [:edit, :update, :destroy]
+    
 
     def index
-        @missions = Mission.all        
+        user_id = session[:user_id]
+        @missions = Mission.includes(:user).where(user_id: user_id)
     end
 
     def new
@@ -11,6 +14,7 @@ class MissionsController < ApplicationController
 
     def create
         @mission = Mission.new(mission_params)
+        @mission.user_id = session[:user_id]
         if @mission.save
           flash[:success] = "任務新增成功"
           redirect_to missions_path
@@ -51,6 +55,14 @@ class MissionsController < ApplicationController
 
     def find_mission
         @mission = Mission.find_by(id: params[:id])
+        @mission.start_at = @mission.start_at.strftime("%Y-%m-%d")
+        @mission.end_at = @mission.end_at.strftime("%Y-%m-%d")
+    end
+
+    def authenticate_user
+        if !session[:user_id]
+            redirect_to login_path
+        end
     end
     
 end
